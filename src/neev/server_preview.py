@@ -14,6 +14,7 @@ from neev.html_preview import (
     render_pdf_preview,
     render_text_preview,
 )
+from neev.html_render import render_html_preview
 from neev.url_utils import encode_attr_url, script_safe_json
 
 
@@ -43,6 +44,31 @@ def serve_markdown_preview(
     raw_url_js = script_safe_json(raw_path + "?download")
     parent = _parent_url(request_path)
     page = render_markdown_preview(filename, raw_url, raw_url_js, parent)
+    body = page.encode()
+    handler.send_response(200)
+    handler.send_header("Content-Type", "text/html; charset=utf-8")
+    handler.send_header("Content-Length", str(len(body)))
+    handler.end_headers()
+    handler.wfile.write(body)
+
+
+def serve_html_preview(
+    handler: "BaseHTTPRequestHandler", path: Path, request_path: str
+) -> None:
+    """Serve a page that renders an HTML file in an iframe, with source toggle.
+
+    Args:
+        handler: The HTTP request handler.
+        path: Resolved filesystem path to the HTML file.
+        request_path: The original URL path from the request.
+    """
+    filename = html.escape(path.name)
+    raw_path = request_path.rstrip("/")
+    iframe_src = encode_attr_url(raw_path)
+    raw_url_js = script_safe_json(raw_path)
+    download_url = encode_attr_url(raw_path) + "?download"
+    parent = _parent_url(request_path)
+    page = render_html_preview(filename, iframe_src, raw_url_js, parent, download_url)
     body = page.encode()
     handler.send_response(200)
     handler.send_header("Content-Type", "text/html; charset=utf-8")
