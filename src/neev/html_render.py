@@ -137,6 +137,11 @@ _RENDER_TEMPLATE = """\
         label.textContent = 'Source';
       }
     });
+    window.addEventListener('load', function () {
+      if (window.hljs && pre.textContent && !pre.querySelector('.hljs')) {
+        hljs.highlightElement(pre);
+      }
+    });
   })();
   </script>
 </body>
