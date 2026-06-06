@@ -138,7 +138,7 @@ _RENDER_TEMPLATE = """\
       }
     });
     window.addEventListener('load', function () {
-      if (window.hljs && pre.textContent && !pre.querySelector('.hljs')) {
+      if (loaded && window.hljs && pre.dataset.highlighted !== 'yes') {
         hljs.highlightElement(pre);
       }
     });
