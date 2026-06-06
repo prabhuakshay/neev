@@ -20,7 +20,11 @@ from neev.log import ansi_styled, status_color
 from neev.server_assets import serve_favicon, serve_static
 from neev.server_auth import check_share_token, handle_login, handle_logout, serve_login_page
 from neev.server_core import serve_directory, serve_file, serve_zip
-from neev.server_preview import serve_generic_preview, serve_markdown_preview
+from neev.server_preview import (
+    serve_generic_preview,
+    serve_html_preview,
+    serve_markdown_preview,
+)
 from neev.server_upload import serve_mkdir, serve_upload
 from neev.server_utils import send_error
 from neev.server_zip import serve_selective_zip
@@ -211,6 +215,9 @@ class NeevHandler(BaseHTTPRequestHandler):
 
         if "preview" in query:
             mime = get_mime_type(resolved)
+            if mime == "text/html":
+                serve_html_preview(self, resolved, request_path)
+                return
             if is_previewable_type(mime):
                 serve_generic_preview(self, resolved, request_path, mime)
                 return

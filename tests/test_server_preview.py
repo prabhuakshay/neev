@@ -93,10 +93,18 @@ class TestFilePreview:
         assert status == 200
         assert b"code-content" in body
 
-    def test_html_preview(self, server):
+    def test_html_preview_renders_in_iframe(self, server):
+        """HTML preview renders the page in an iframe, not as source."""
         status, _, body = _get(server, "/page.html?preview")
         assert status == 200
         assert b"page.html" in body
+        assert b"<iframe" in body
+        assert b'src="/page.html"' in body
+
+    def test_html_preview_has_source_toggle(self, server):
+        """HTML preview offers a control to view the source."""
+        _, _, body = _get(server, "/page.html?preview")
+        assert b'id="source-toggle"' in body
 
     def test_pdf_preview(self, server, serve_dir):
         (serve_dir / "doc.pdf").write_bytes(b"%PDF-1.4 fake")
