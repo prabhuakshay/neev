@@ -112,6 +112,7 @@ _RENDER_TEMPLATE = """\
     var sourceView = document.getElementById('source-view');
     var pre = document.getElementById('source-content');
     var loaded = false;
+    var sourceReady = false;
     var showingSource = false;
     btn.addEventListener('click', function () {
       showingSource = !showingSource;
@@ -125,6 +126,7 @@ _RENDER_TEMPLATE = """\
             .then(function (r) { return r.text(); })
             .then(function (text) {
               pre.textContent = text;
+              sourceReady = true;
               if (window.hljs) hljs.highlightElement(pre);
             })
             .catch(function () {
@@ -138,7 +140,7 @@ _RENDER_TEMPLATE = """\
       }
     });
     window.addEventListener('load', function () {
-      if (loaded && window.hljs && pre.dataset.highlighted !== 'yes') {
+      if (sourceReady && window.hljs && pre.dataset.highlighted !== 'yes') {
         hljs.highlightElement(pre);
       }
     });
