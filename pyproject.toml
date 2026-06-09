@@ -1,6 +1,6 @@
 [project]
 name = "neev"
-version = "0.1.0"
+version = "0.2.0"
 description = "Zero-dependency Python CLI for sharing local directories over HTTP with authentication, file browsing, and ZIP downloads"
 readme = "README.md"
 authors = [
