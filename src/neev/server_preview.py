@@ -52,9 +52,7 @@ def serve_markdown_preview(
     handler.wfile.write(body)
 
 
-def serve_html_preview(
-    handler: "BaseHTTPRequestHandler", path: Path, request_path: str
-) -> None:
+def serve_html_preview(handler: "BaseHTTPRequestHandler", path: Path, request_path: str) -> None:
     """Serve a page that renders an HTML file in an iframe, with source toggle.
 
     Args:
